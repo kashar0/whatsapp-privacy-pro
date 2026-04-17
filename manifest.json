@@ -1,0 +1,63 @@
+{
+  "manifest_version": 3,
+  "name": "WhatsApp Privacy Pro",
+  "version": "1.0.0",
+  "description": "Privacy in Plain Sight — granular blur, auto-lock, PIN protection, and stealth mode for WhatsApp Web.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    },
+    "default_title": "WhatsApp Privacy Pro"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://web.whatsapp.com/*"],
+      "js": ["utils/storage.js", "content.js"],
+      "css": ["privacy.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": [
+    "storage",
+    "alarms"
+  ],
+  "host_permissions": [
+    "https://web.whatsapp.com/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none';"
+  },
+  "commands": {
+    "toggle-privacy": {
+      "suggested_key": {
+        "default": "Alt+X",
+        "mac": "Alt+X"
+      },
+      "description": "Toggle Privacy Mode On/Off"
+    },
+    "lock-now": {
+      "suggested_key": {
+        "default": "Alt+L",
+        "mac": "Alt+L"
+      },
+      "description": "Lock WhatsApp Immediately"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["lock-overlay.html"],
+      "matches": ["https://web.whatsapp.com/*"]
+    }
+  ]
+}

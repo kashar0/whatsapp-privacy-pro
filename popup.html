@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=380">
+  <title>WhatsApp Privacy Pro</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header with master toggle -->
+    <header id="header">
+      <div class="header-top">
+        <div class="brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>Privacy Pro</h1>
+            <span class="brand-sub">WhatsApp Web</span>
+          </div>
+        </div>
+        <label class="toggle-master" aria-label="Master privacy toggle">
+          <input type="checkbox" id="masterToggle">
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        </label>
+      </div>
+      <div class="shortcuts">
+        <kbd>Alt+X</kbd> toggle &nbsp;&middot;&nbsp; <kbd>Alt+L</kbd> lock
+      </div>
+    </header>
+
+    <!-- Warning if not on WA -->
+    <div id="notOnWA" class="notice" style="display:none;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Open <strong>web.whatsapp.com</strong> to use Privacy Pro</span>
+    </div>
+
+    <!-- Main controls -->
+    <main id="mainContent">
+
+      <!-- Blur Controls -->
+      <section class="card">
+        <div class="card-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Blur Controls
+        </div>
+
+        <label class="row"><span>Chat messages</span><span class="sw"><input type="checkbox" id="blurMessages"><span class="sw-track"><span class="sw-thumb"></span></span></span></label>
+        <label class="row"><span>Message previews</span><span class="sw"><input type="checkbox" id="blurLastMessage"><span class="sw-track"><span class="sw-thumb"></span></span></span></label>
+        <label class="row"><span>Images &amp; video</span><span class="sw"><input type="checkbox" id="blurMedia"><span class="sw-track"><span class="sw-thumb"></span></span></span></label>
+        <label class="row"><span>Profile pictures</span><span class="sw"><input type="checkbox" id="blurProfilePics"><span class="sw-track"><span class="sw-thumb"></span></span></span></label>
+        <label class="row"><span>Names &amp; groups</span><span class="sw"><input type="checkbox" id="blurContactNames"><span class="sw-track"><span class="sw-thumb"></span></span></span></label>
+
+        <div class="slider-block">
+          <div class="slider-label">
+            <span>Blur intensity</span>
+            <span id="blurValue" class="slider-val">8px</span>
+          </div>
+          <input type="range" id="blurIntensity" min="1" max="20" step="1" value="8">
+        </div>
+
+        <label class="row"><span>Hover to reveal</span><span class="sw"><input type="checkbox" id="hoverReveal"><span class="sw-track"><span class="sw-thumb"></span></span></span></label>
+      </section>
+
+      <!-- Stealth Mode -->
+      <section class="card">
+        <div class="card-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          Stealth Mode
+        </div>
+        <label class="row"><span>Hide "typing..." indicator</span><span class="sw"><input type="checkbox" id="hideTypingStatus"><span class="sw-track"><span class="sw-thumb"></span></span></span></label>
+        <label class="row"><span>Hide online status</span><span class="sw"><input type="checkbox" id="hideOnlineStatus"><span class="sw-track"><span class="sw-thumb"></span></span></span></label>
+      </section>
+
+      <!-- Security -->
+      <section class="card">
+        <div class="card-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Security
+        </div>
+
+        <label class="row"><span>PIN lock</span><span class="sw"><input type="checkbox" id="pinEnabled"><span class="sw-track"><span class="sw-thumb"></span></span></span></label>
+
+        <div id="pinSetup" class="sub-card" style="display:none;">
+          <div class="pin-row">
+            <input type="password" id="pinInput1" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="PIN digit 1">
+            <input type="password" id="pinInput2" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="PIN digit 2">
+            <input type="password" id="pinInput3" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="PIN digit 3">
+            <input type="password" id="pinInput4" class="pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="PIN digit 4">
+          </div>
+          <button id="savePinBtn" class="btn-accent">Save PIN</button>
+          <div id="pinStatus" class="pin-msg"></div>
+        </div>
+
+        <label class="row"><span>Auto-lock on idle</span><span class="sw"><input type="checkbox" id="autoLockEnabled"><span class="sw-track"><span class="sw-thumb"></span></span></span></label>
+
+        <div id="autoLockConfig" class="sub-card" style="display:none;">
+          <div class="select-row">
+            <span>Lock after</span>
+            <select id="autoLockMinutes" aria-label="Auto-lock timeout">
+              <option value="1">1 min</option>
+              <option value="2">2 min</option>
+              <option value="5" selected>5 min</option>
+              <option value="10">10 min</option>
+              <option value="15">15 min</option>
+              <option value="30">30 min</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="row"><span>Screenshot guard</span><span class="sw"><input type="checkbox" id="snapshotProtection"><span class="sw-track"><span class="sw-thumb"></span></span></span></label>
+
+        <button id="lockNowBtn" class="btn-lock" aria-label="Lock WhatsApp now">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Lock Now
+        </button>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <span>v1.0.0</span>
+      <button id="resetBtn" class="btn-ghost" aria-label="Reset all settings">Reset</button>
+    </footer>
+  </div>
+
+  <script src="utils/storage.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+/* ============================================
+   WhatsApp Privacy Pro — Popup v4
+   Using WhatsApp's official colour palette.
+   ============================================ */
+
+:root {
+  /* WhatsApp dark palette */
+  --wa-bg-deep: #111b21;
+  --wa-bg-panel: #202c33;
+  --wa-bg-card: #182229;
+  --wa-bg-hover: #233138;
+  --wa-bg-input: #2a3942;
+
+  /* WhatsApp greens */
+  --wa-green: #00a884;
+  --wa-green-bright: #25d366;
+  --wa-green-light: #06cf9c;
+  --wa-green-glow: rgba(0, 168, 132, 0.15);
+  --wa-green-soft: rgba(0, 168, 132, 0.08);
+
+  /* Text */
+  --wa-text: #e9edef;
+  --wa-text-secondary: #8696a0;
+  --wa-text-muted: #667781;
+
+  /* Accents */
+  --wa-teal-dark: #005c4b;
+  --wa-red: #ea4335;
+  --wa-border: rgba(134, 150, 160, 0.15);
+  --wa-border-light: rgba(134, 150, 160, 0.08);
+
+  --radius: 14px;
+  --radius-sm: 10px;
+  --transition: 0.2s ease;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 360px;
+  max-height: 560px;
+  overflow-y: auto;
+  background: var(--wa-bg-deep);
+  color: var(--wa-text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::-webkit-scrollbar { width: 4px; }
+body::-webkit-scrollbar-track { background: transparent; }
+body::-webkit-scrollbar-thumb { background: var(--wa-bg-hover); border-radius: 4px; }
+
+/* ── Header ─────────────────────────────── */
+
+#header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 16px 16px 12px;
+  background: var(--wa-teal-dark);
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--wa-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 168, 132, 0.4);
+}
+
+.brand-icon svg {
+  width: 19px;
+  height: 19px;
+  color: white;
+}
+
+.brand-text h1 {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.3px;
+}
+
+.brand-sub {
+  font-size: 10.5px;
+  color: rgba(255,255,255,0.65);
+  font-weight: 400;
+}
+
+.shortcuts {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+}
+
+.shortcuts kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.15);
+  font-family: inherit;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+}
+
+/* ── Master Toggle ──────────────────────── */
+
+.toggle-master {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.toggle-master input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.toggle-master .toggle-track {
+  width: 46px;
+  height: 26px;
+  border-radius: 13px;
+  background: rgba(255,255,255,0.2);
+  transition: background var(--transition);
+  position: relative;
+}
+
+.toggle-master input:checked + .toggle-track {
+  background: var(--wa-green);
+}
+
+.toggle-master .toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  transition: transform var(--transition);
+}
+
+.toggle-master input:checked + .toggle-track .toggle-thumb {
+  transform: translateX(20px);
+}
+
+.toggle-master input:focus-visible + .toggle-track {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* ── Cards ──────────────────────────────── */
+
+.card {
+  margin: 10px 12px;
+  padding: 14px;
+  background: var(--wa-bg-panel);
+  border-radius: var(--radius);
+  border: 1px solid var(--wa-border-light);
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--wa-green);
+  margin-bottom: 10px;
+}
+
+.card-title svg { color: var(--wa-green); flex-shrink: 0; }
+
+/* ── Rows ───────────────────────────────── */
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+  cursor: pointer;
+}
+
+.row > span:first-child {
+  color: var(--wa-text);
+  font-size: 13px;
+}
+
+/* ── Mini Switch ────────────────────────── */
+
+.sw {
+  position: relative;
+  display: inline-flex;
+}
+
+.sw input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.sw .sw-track {
+  width: 38px;
+  height: 22px;
+  border-radius: 11px;
+  background: var(--wa-bg-input);
+  border: 1px solid var(--wa-border);
+  transition: background var(--transition), border-color var(--transition);
+  position: relative;
+}
+
+.sw input:checked + .sw-track {
+  background: var(--wa-green);
+  border-color: var(--wa-green);
+}
+
+.sw .sw-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: transform var(--transition);
+}
+
+.sw input:checked + .sw-track .sw-thumb {
+  transform: translateX(16px);
+}
+
+.sw input:focus-visible + .sw-track {
+  outline: 2px solid var(--wa-green);
+  outline-offset: 2px;
+}
+
+/* ── Slider ─────────────────────────────── */
+
+.slider-block {
+  padding: 8px 0 4px;
+}
+
+.slider-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--wa-text);
+}
+
+.slider-val {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--wa-green);
+  background: var(--wa-green-soft);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+input[type="range"] {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--wa-bg-input);
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--wa-green);
+  cursor: pointer;
+  box-shadow: 0 0 0 3px var(--wa-green-glow);
+  transition: box-shadow var(--transition);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 6px var(--wa-green-glow);
+}
+
+/* ── Sub-card ───────────────────────────── */
+
+.sub-card {
+  padding: 12px;
+  margin: 6px 0;
+  background: var(--wa-bg-card);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--wa-border-light);
+}
+
+.pin-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.pin-box {
+  width: 44px;
+  height: 50px;
+  border: 2px solid var(--wa-border);
+  border-radius: var(--radius-sm);
+  background: var(--wa-bg-deep);
+  color: var(--wa-text);
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  caret-color: var(--wa-green);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.pin-box:focus {
+  border-color: var(--wa-green);
+  box-shadow: 0 0 0 3px var(--wa-green-glow);
+}
+
+.pin-msg {
+  font-size: 11px;
+  text-align: center;
+  margin-top: 8px;
+  min-height: 16px;
+}
+.pin-msg.ok { color: var(--wa-green-light); }
+.pin-msg.err { color: var(--wa-red); }
+
+.select-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--wa-text-secondary);
+}
+
+.select-row select {
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--wa-bg-deep);
+  color: var(--wa-text);
+  border: 1px solid var(--wa-border);
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+.select-row select:focus {
+  border-color: var(--wa-green);
+}
+
+/* ── Buttons ────────────────────────────── */
+
+.btn-accent {
+  display: block;
+  width: 100%;
+  padding: 9px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--wa-green);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), transform 0.1s ease;
+}
+
+.btn-accent:hover { background: var(--wa-green-light); }
+.btn-accent:active { transform: scale(0.98); }
+
+.btn-lock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 2px solid var(--wa-red);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--wa-red);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.btn-lock:hover {
+  background: var(--wa-red);
+  color: white;
+}
+
+.btn-lock svg { flex-shrink: 0; }
+
+.btn-ghost {
+  padding: 4px 12px;
+  border: 1px solid var(--wa-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--wa-text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.btn-ghost:hover {
+  color: var(--wa-red);
+  border-color: var(--wa-red);
+}
+
+/* ── Notice ─────────────────────────────── */
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(251, 146, 60, 0.1);
+  border: 1px solid rgba(251, 146, 60, 0.2);
+  color: #fb923c;
+  font-size: 12px;
+}
+
+.notice svg { flex-shrink: 0; color: #fb923c; }
+
+/* ── Footer ─────────────────────────────── */
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px 12px;
+  font-size: 11px;
+  color: var(--wa-text-muted);
+}
+
+/* ── Disabled state ─────────────────────── */
+
+main.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  filter: grayscale(0.6);
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}

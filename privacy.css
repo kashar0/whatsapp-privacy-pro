@@ -1,0 +1,435 @@
+/**
+ * WhatsApp Privacy Pro — Privacy Stylesheet v4
+ * 
+ * Credits:
+ *   Inspired by "Privacy Extension For WhatsApp Web" by Lukas Lenhardt (MIT)
+ *   https://github.com/LukasLen/Privacy-Extension-For-WhatsApp-Web
+ *   DOM patterns informed by Will Hackett's WhatsApp Web analysis.
+ *   All code independently written.
+ *
+ * HOVER FIX (v4):
+ *   The blur rules use `body.CLASS element` patterns (specificity: 0-1-1).
+ *   To guarantee hover ALWAYS wins, every hover rule chains TWO body
+ *   classes: `body.wpp-hover-reveal.wpp-CLASS`, giving specificity 0-2-1.
+ *   This is higher than 0-1-1 so hover always overrides blur, even with
+ *   !important on both sides (same !important = higher specificity wins).
+ */
+
+:root {
+  --wpp-blur: 8px;
+  --wpp-blur-heavy: 12px;
+  --wpp-transition: 0.22s ease;
+  --wpp-reveal-delay: 0.06s;
+}
+
+
+/* =============================================
+   1. CHAT MESSAGES — BLUR
+   ============================================= */
+
+body.wpp-privacy-active .message-in .copyable-text,
+body.wpp-privacy-active .message-out .copyable-text,
+body.wpp-privacy-active .message-in .selectable-text,
+body.wpp-privacy-active .message-out .selectable-text,
+body.wpp-privacy-active .message-in span[dir],
+body.wpp-privacy-active .message-out span[dir],
+body.wpp-privacy-active [data-testid="msg-container"] .copyable-text,
+body.wpp-privacy-active [data-testid="msg-container"] .selectable-text,
+body.wpp-privacy-active [data-testid="msg-container"] span[dir],
+body.wpp-privacy-active [data-testid="quoted-message"] span,
+body.wpp-privacy-active .quoted-mention {
+  filter: blur(var(--wpp-blur)) !important;
+  transition: filter var(--wpp-transition) var(--wpp-reveal-delay);
+}
+
+/* 1-HOVER: unblur messages — chained class beats blur */
+
+body.wpp-hover-reveal.wpp-privacy-active .message-in:hover .copyable-text,
+body.wpp-hover-reveal.wpp-privacy-active .message-in:hover .selectable-text,
+body.wpp-hover-reveal.wpp-privacy-active .message-in:hover span[dir],
+body.wpp-hover-reveal.wpp-privacy-active .message-in:hover span,
+body.wpp-hover-reveal.wpp-privacy-active .message-out:hover .copyable-text,
+body.wpp-hover-reveal.wpp-privacy-active .message-out:hover .selectable-text,
+body.wpp-hover-reveal.wpp-privacy-active .message-out:hover span[dir],
+body.wpp-hover-reveal.wpp-privacy-active .message-out:hover span,
+body.wpp-hover-reveal.wpp-privacy-active [data-testid="msg-container"]:hover .copyable-text,
+body.wpp-hover-reveal.wpp-privacy-active [data-testid="msg-container"]:hover .selectable-text,
+body.wpp-hover-reveal.wpp-privacy-active [data-testid="msg-container"]:hover span[dir],
+body.wpp-hover-reveal.wpp-privacy-active [data-testid="msg-container"]:hover span,
+body.wpp-hover-reveal.wpp-privacy-active [data-testid="msg-container"]:hover [data-testid="quoted-message"] span {
+  filter: blur(0) !important;
+  transition-delay: 0s !important;
+}
+
+
+/* =============================================
+   2. LAST MESSAGE PREVIEW — BLUR
+   ============================================= */
+
+body.wpp-blur-lastmsg #pane-side [role="listitem"] span[title]:not([data-testid="chatlist-header"]),
+body.wpp-blur-lastmsg #pane-side [role="listitem"] [data-testid="cell-frame-secondary"] span,
+body.wpp-blur-lastmsg #pane-side [role="listitem"] [data-testid="last-msg-status"] ~ span,
+body.wpp-blur-lastmsg [data-testid="chat-list"] [role="row"] span[dir]:not([data-testid]) {
+  filter: blur(var(--wpp-blur)) !important;
+  transition: filter var(--wpp-transition) var(--wpp-reveal-delay);
+}
+
+/* 2-HOVER: unblur sidebar previews */
+
+body.wpp-hover-reveal.wpp-blur-lastmsg #pane-side [role="listitem"]:hover span[title],
+body.wpp-hover-reveal.wpp-blur-lastmsg #pane-side [role="listitem"]:hover [data-testid="cell-frame-secondary"] span,
+body.wpp-hover-reveal.wpp-blur-lastmsg #pane-side [role="listitem"]:hover span,
+body.wpp-hover-reveal.wpp-blur-lastmsg #pane-side [role="row"]:hover span[dir],
+body.wpp-hover-reveal.wpp-blur-lastmsg #pane-side [role="row"]:hover span,
+body.wpp-hover-reveal.wpp-blur-lastmsg [data-testid="chat-list"] [role="listitem"]:hover span {
+  filter: blur(0) !important;
+  transition-delay: 0s !important;
+}
+
+
+/* =============================================
+   3. MEDIA — BLUR
+   ============================================= */
+
+body.wpp-blur-media .message-in img:not([data-testid="profile-photo"]),
+body.wpp-blur-media .message-out img:not([data-testid="profile-photo"]),
+body.wpp-blur-media .message-in video,
+body.wpp-blur-media .message-out video,
+body.wpp-blur-media [data-testid="msg-container"] img:not([data-testid="profile-photo"]),
+body.wpp-blur-media [data-testid="msg-container"] video,
+body.wpp-blur-media [data-testid="media-state-img"],
+body.wpp-blur-media [data-testid="image-thumb"],
+body.wpp-blur-media [data-testid="media-url-cover"],
+body.wpp-blur-media img[src*="blob:"],
+body.wpp-blur-media [data-testid="media-canvas"],
+body.wpp-blur-media [data-testid="sticker"] img,
+body.wpp-blur-media #main img:not([data-testid="profile-photo"]):not([data-icon]),
+body.wpp-blur-media #main video {
+  filter: blur(var(--wpp-blur-heavy)) !important;
+  transition: filter var(--wpp-transition) var(--wpp-reveal-delay);
+}
+
+/* 3-HOVER: unblur media — chained + explicit targets */
+
+body.wpp-hover-reveal.wpp-blur-media .message-in:hover img,
+body.wpp-hover-reveal.wpp-blur-media .message-in:hover video,
+body.wpp-hover-reveal.wpp-blur-media .message-out:hover img,
+body.wpp-hover-reveal.wpp-blur-media .message-out:hover video,
+body.wpp-hover-reveal.wpp-blur-media [data-testid="msg-container"]:hover img,
+body.wpp-hover-reveal.wpp-blur-media [data-testid="msg-container"]:hover video,
+body.wpp-hover-reveal.wpp-blur-media #main .message-in:hover img,
+body.wpp-hover-reveal.wpp-blur-media #main .message-out:hover img,
+body.wpp-hover-reveal.wpp-blur-media #main .message-in:hover video,
+body.wpp-hover-reveal.wpp-blur-media #main .message-out:hover video,
+body.wpp-hover-reveal .message-in:hover [data-testid="image-thumb"],
+body.wpp-hover-reveal .message-in:hover [data-testid="media-state-img"],
+body.wpp-hover-reveal .message-in:hover [data-testid="media-url-cover"],
+body.wpp-hover-reveal .message-in:hover [data-testid="media-canvas"],
+body.wpp-hover-reveal .message-out:hover [data-testid="image-thumb"],
+body.wpp-hover-reveal .message-out:hover [data-testid="media-state-img"],
+body.wpp-hover-reveal .message-out:hover [data-testid="media-url-cover"],
+body.wpp-hover-reveal .message-out:hover [data-testid="media-canvas"],
+body.wpp-hover-reveal .message-in:hover img[src*="blob:"],
+body.wpp-hover-reveal .message-out:hover img[src*="blob:"] {
+  filter: blur(0) !important;
+  transition-delay: 0s !important;
+}
+
+
+/* =============================================
+   4. PROFILE PICTURES — BLUR
+   ============================================= */
+
+body.wpp-blur-profilepic img[data-testid="profile-photo"],
+body.wpp-blur-profilepic #pane-side img[draggable="false"],
+body.wpp-blur-profilepic [data-testid="cell-frame-primary"] img,
+body.wpp-blur-profilepic [data-testid="chat-list"] img[draggable="false"],
+body.wpp-blur-profilepic header img[draggable="false"] {
+  filter: blur(var(--wpp-blur)) !important;
+  transition: filter var(--wpp-transition) var(--wpp-reveal-delay);
+}
+
+/* 4-HOVER: unblur profile pics on row hover */
+
+body.wpp-hover-reveal.wpp-blur-profilepic #pane-side [role="listitem"]:hover img[draggable="false"],
+body.wpp-hover-reveal.wpp-blur-profilepic #pane-side [role="listitem"]:hover img[data-testid="profile-photo"],
+body.wpp-hover-reveal.wpp-blur-profilepic #pane-side [role="listitem"]:hover [data-testid="cell-frame-primary"] img,
+body.wpp-hover-reveal.wpp-blur-profilepic #pane-side [role="row"]:hover img,
+body.wpp-hover-reveal.wpp-blur-profilepic [data-testid="chat-list"] [role="listitem"]:hover img,
+body.wpp-hover-reveal.wpp-blur-profilepic [data-testid="conversation-header"]:hover img,
+body.wpp-hover-reveal.wpp-blur-profilepic header:hover img[draggable="false"] {
+  filter: blur(0) !important;
+  transition-delay: 0s !important;
+}
+
+
+/* =============================================
+   5. CONTACT / GROUP NAMES — BLUR
+   ============================================= */
+
+body.wpp-blur-names #pane-side [role="listitem"] [data-testid="cell-frame-title"] span[dir],
+body.wpp-blur-names [data-testid="conversation-header"] span[dir],
+body.wpp-blur-names [data-testid="conversation-info-header-chat-title"],
+body.wpp-blur-names #pane-side [role="row"] span[title] {
+  filter: blur(var(--wpp-blur)) !important;
+  transition: filter var(--wpp-transition) var(--wpp-reveal-delay);
+}
+
+/* 5-HOVER: unblur names — chained class specificity */
+
+body.wpp-hover-reveal.wpp-blur-names #pane-side [role="listitem"]:hover [data-testid="cell-frame-title"] span[dir],
+body.wpp-hover-reveal.wpp-blur-names #pane-side [role="listitem"]:hover [data-testid="cell-frame-title"] span,
+body.wpp-hover-reveal.wpp-blur-names #pane-side [role="listitem"]:hover span[title],
+body.wpp-hover-reveal.wpp-blur-names #pane-side [role="row"]:hover span[title],
+body.wpp-hover-reveal.wpp-blur-names #pane-side [role="row"]:hover span[dir],
+body.wpp-hover-reveal.wpp-blur-names [data-testid="conversation-header"]:hover span[dir],
+body.wpp-hover-reveal.wpp-blur-names [data-testid="conversation-header"]:hover span {
+  filter: blur(0) !important;
+  transition-delay: 0s !important;
+}
+
+
+/* =============================================
+   6. CATCH-ALL WILDCARD HOVER
+   
+   As a final safety net, if any element is
+   missed by the specific rules above, this
+   wildcard catches it. Lower specificity than
+   the rules above but still works for any
+   elements not explicitly covered.
+   ============================================= */
+
+body.wpp-hover-reveal .message-in:hover *,
+body.wpp-hover-reveal .message-out:hover *,
+body.wpp-hover-reveal [data-testid="msg-container"]:hover * {
+  filter: blur(0) !important;
+  transition-delay: 0s !important;
+}
+
+body.wpp-hover-reveal #pane-side [role="listitem"]:hover *,
+body.wpp-hover-reveal #pane-side [role="row"]:hover *,
+body.wpp-hover-reveal [data-testid="conversation-header"]:hover * {
+  filter: blur(0) !important;
+  transition-delay: 0s !important;
+}
+
+
+/* =============================================
+   7. MEDIA VIEWER / LIGHTBOX EXEMPTION
+
+   When you click an image in WhatsApp, it opens
+   a full-screen media viewer OUTSIDE of the
+   .message-in/.message-out tree. It renders as
+   a direct child of #app or as an overlay panel.
+   
+   WhatsApp uses various container patterns:
+   - [data-testid="media-viewer-modal"]
+   - Overlay divs with role="dialog" or role="application"
+   - Panels that are siblings of #main, not inside it
+   - Elements with z-index layered above the chat
+   
+   We ALWAYS unblur everything in these viewers.
+   These rules use high specificity and !important
+   to override any blur rule.
+   ============================================= */
+
+/* By data-testid (most reliable if present) */
+[data-testid="media-viewer-modal"] img,
+[data-testid="media-viewer-modal"] video,
+[data-testid="media-viewer-modal"] canvas,
+body.wpp-blur-media [data-testid="media-viewer-modal"] img,
+body.wpp-blur-media [data-testid="media-viewer-modal"] video {
+  filter: none !important;
+}
+
+/* By role (WhatsApp viewer often has role="dialog" or "application") */
+[role="dialog"] img:not([data-testid="profile-photo"]),
+[role="dialog"] video,
+body.wpp-blur-media [role="dialog"] img:not([data-testid="profile-photo"]),
+body.wpp-blur-media [role="dialog"] video {
+  filter: none !important;
+}
+
+/* By structural position: direct children of #app that are NOT #main or #side */
+#app > div:not(#main):not(#side):not(#pane-side) img,
+#app > div:not(#main):not(#side):not(#pane-side) video,
+body.wpp-blur-media #app > div:not(#main):not(#side):not(#pane-side) img,
+body.wpp-blur-media #app > div:not(#main):not(#side):not(#pane-side) video {
+  filter: none !important;
+}
+
+/* Catch any overlay/modal-like panel using common patterns */
+[data-testid="image-msg-viewer"] img,
+[data-testid="video-player"] video,
+[data-testid="image-msg-viewer"] canvas,
+body.wpp-blur-media [data-testid="image-msg-viewer"] img,
+body.wpp-blur-media [data-testid="video-player"] video {
+  filter: none !important;
+}
+
+/* Fullscreen viewer images (usually have very high natural dimensions 
+   and are positioned fixed/absolute with z-index > chat) */
+div[tabindex="-1"][role="application"] img,
+div[tabindex="-1"][role="application"] video,
+body.wpp-blur-media div[tabindex="-1"][role="application"] img,
+body.wpp-blur-media div[tabindex="-1"][role="application"] video {
+  filter: none !important;
+}
+
+/* Media gallery drawer (opens from right side) */
+[data-testid="media-gallery"] img,
+[data-testid="media-gallery"] video,
+body.wpp-blur-media [data-testid="media-gallery"] img,
+body.wpp-blur-media [data-testid="media-gallery"] video {
+  filter: none !important;
+}
+
+
+/* =============================================
+   8. LOCK OVERLAY
+   ============================================= */
+
+#wpp-lock-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #111b21;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  opacity: 0;
+  animation: wppFadeIn 0.3s ease forwards;
+}
+
+@keyframes wppFadeIn {
+  to { opacity: 1; }
+}
+
+#wpp-lock-overlay .wpp-lock-card {
+  width: 340px;
+  padding: 40px 32px;
+  background: #202c33;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+#wpp-lock-overlay .wpp-lock-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, #00a884, #25d366);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#wpp-lock-overlay .wpp-lock-icon svg {
+  width: 32px;
+  height: 32px;
+  fill: white;
+}
+
+#wpp-lock-overlay h2 {
+  color: #e9edef;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+#wpp-lock-overlay p {
+  color: #8696a0;
+  font-size: 13px;
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+
+#wpp-lock-overlay .wpp-pin-input-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+#wpp-lock-overlay .wpp-pin-digit {
+  width: 48px;
+  height: 56px;
+  border: 2px solid #3b4a54;
+  border-radius: 12px;
+  background: #111b21;
+  color: #e9edef;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  caret-color: #00a884;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#wpp-lock-overlay .wpp-pin-digit:focus {
+  border-color: #00a884;
+  box-shadow: 0 0 0 3px rgba(0, 168, 132, 0.2);
+}
+
+#wpp-lock-overlay .wpp-pin-digit.wpp-error {
+  border-color: #ef4444;
+  animation: wppShake 0.4s ease;
+}
+
+@keyframes wppShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+#wpp-lock-overlay .wpp-unlock-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #00a884;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+#wpp-lock-overlay .wpp-unlock-btn:hover { background: #06cf9c; }
+#wpp-lock-overlay .wpp-unlock-btn:active { transform: scale(0.98); }
+
+#wpp-lock-overlay .wpp-error-msg {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 12px;
+  min-height: 16px;
+}
+
+
+/* =============================================
+   8. SNAPSHOT PROTECTION
+   ============================================= */
+
+@media print {
+  body.wpp-snapshot-protect * {
+    visibility: hidden !important;
+  }
+  body.wpp-snapshot-protect::after {
+    content: "Content hidden by WhatsApp Privacy Pro";
+    visibility: visible !important;
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    background: #111b21;
+    color: #00a884;
+    z-index: 999999;
+  }
+}
