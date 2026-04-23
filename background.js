@@ -1,6 +1,10 @@
 /**
- * WhatsApp Privacy Pro — Background Service Worker
- * Handles: keyboard shortcuts, alarms, storage sync, tab messaging.
+ * WhatsApp Privacy Pro — Background Service Worker v1.3.1
+ *
+ * FIX v1.3.1:
+ *  - Removed context menu (WhatsApp Web intercepts right-click with its own menu)
+ *  - Per-chat rules now driven by floating in-page UI button (content.js)
+ *  - Notification masking retained
  */
 
 // ── Keyboard Shortcuts ──────────────────────────
@@ -11,7 +15,6 @@ chrome.commands.onCommand.addListener(async (command) => {
   if (command === 'toggle-privacy') {
     chrome.tabs.sendMessage(tab.id, { action: 'togglePrivacy' }).catch(() => {});
   }
-
   if (command === 'lock-now') {
     chrome.tabs.sendMessage(tab.id, { action: 'lockNow' }).catch(() => {});
   }
@@ -20,19 +23,13 @@ chrome.commands.onCommand.addListener(async (command) => {
 // ── Storage Changes → Push to Content Script ─────
 chrome.storage.onChanged.addListener(async (changes, area) => {
   if (area !== 'local') return;
-
   const updated = {};
   for (const [key, { newValue }] of Object.entries(changes)) {
     updated[key] = newValue;
   }
-
-  // Push to all WhatsApp Web tabs
   const tabs = await chrome.tabs.query({ url: 'https://web.whatsapp.com/*' });
   for (const tab of tabs) {
-    chrome.tabs.sendMessage(tab.id, {
-      action: 'updateSettings',
-      settings: updated
-    }).catch(() => {});
+    chrome.tabs.sendMessage(tab.id, { action: 'updateSettings', settings: updated }).catch(() => {});
   }
 });
 
@@ -49,7 +46,6 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 // ── Install / Update Handler ─────────────────────
 chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === 'install') {
-    // Set defaults on first install
     const { privacyEnabled } = await chrome.storage.local.get('privacyEnabled');
     if (privacyEnabled === undefined) {
       await chrome.storage.local.set({
@@ -67,8 +63,14 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         autoLockMinutes: 5,
         pinEnabled: false,
         pinHash: null,
-        snapshotProtection: false
+        snapshotProtection: false,
+        blurCompose: true,
+        maskNotifications: true,
+        chatRules: {}
       });
     }
   }
 });
+
+// No additional message handlers needed — notification masking
+// is handled entirely in content.js via page-world Notification intercept.
