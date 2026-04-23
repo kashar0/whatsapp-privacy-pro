@@ -29,6 +29,9 @@
   const autoLockConfig = $('#autoLockConfig');
   const autoLockMinutes = $('#autoLockMinutes');
   const snapshotProtection = $('#snapshotProtection');
+  const maskNotifications  = $('#maskNotifications');
+  const blurCompose        = $('#blurCompose');
+  const chatRulesList      = $('#chatRulesList');
   const lockNowBtn = $('#lockNowBtn');
   const resetBtn = $('#resetBtn');
 
@@ -59,6 +62,33 @@
   autoLockEnabled.checked = settings.autoLockEnabled;
   autoLockMinutes.value = settings.autoLockMinutes;
   snapshotProtection.checked = settings.snapshotProtection;
+  maskNotifications.checked  = settings.maskNotifications ?? true;
+  blurCompose.checked        = settings.blurCompose ?? true;
+
+  // Render per-chat rules list
+  function renderChatRules() {
+    const rules = settings.chatRules || {};
+    const entries = Object.entries(rules);
+    if (!entries.length) {
+      chatRulesList.textContent = 'No custom rules set.';
+      return;
+    }
+    chatRulesList.textContent = '';
+    entries.forEach(([name, rule]) => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--wa-border-light)';
+      const label = document.createElement('span');
+      label.style.cssText = 'color:var(--wa-text);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+      label.textContent = name;
+      const badge = document.createElement('span');
+      badge.style.cssText = `font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;background:${rule === 'always' ? 'rgba(0,168,132,0.15)' : 'rgba(234,67,53,0.12)'};color:${rule === 'always' ? 'var(--wa-green)' : 'var(--wa-red)'}`;
+      badge.textContent = rule === 'always' ? 'always blur' : 'never blur';
+      row.appendChild(label);
+      row.appendChild(badge);
+      chatRulesList.appendChild(row);
+    });
+  }
+  renderChatRules();
 
   pinSetup.style.display = settings.pinEnabled ? 'block' : 'none';
   autoLockConfig.style.display = settings.autoLockEnabled ? 'block' : 'none';
@@ -98,7 +128,9 @@
     [hoverReveal, 'hoverReveal'],
     [hideTypingStatus, 'hideTypingStatus'],
     [hideOnlineStatus, 'hideOnlineStatus'],
-    [snapshotProtection, 'snapshotProtection']
+    [snapshotProtection, 'snapshotProtection'],
+    [maskNotifications,  'maskNotifications'],
+    [blurCompose,        'blurCompose']
   ];
 
   toggleMap.forEach(([el, key]) => {
