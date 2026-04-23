@@ -33,7 +33,20 @@ const DEFAULT_SETTINGS = {
   pinHash: null,
 
   // Snapshot protection
-  snapshotProtection: false
+  snapshotProtection: false,
+
+  // v1.3 — Compose box blur
+  blurCompose: true,
+
+  // v1.3 — Notification masking
+  maskNotifications: true,
+
+  // v1.3 — Per-chat rules: { "Chat Name": "always" | "never" }
+  chatRules: {},
+
+  // v1.3.2 — PIN rate-limit state (brute-force protection)
+  pinFailCount:  0,
+  pinLockUntil:  0
 };
 
 const StorageUtil = {
